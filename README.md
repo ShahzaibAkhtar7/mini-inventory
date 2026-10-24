@@ -106,7 +106,7 @@ Open your browser and navigate to `http://localhost:5173`.
 ## 🔌 API Endpoints
 
 | Method | Endpoint | Description | 
-| --- | --- | --- | --- |
+
 | **GET** | `/api/products` | Retrieve all products in inventory 
 | **POST** | `/api/products` | Add a new product 
 | **POST** | `/api/purchase/:id` | Purchase one unit of a product 
