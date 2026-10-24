@@ -59,7 +59,7 @@ inventory-system/
 
 ```bash
 git clone <your-repository-url>
-cd mini-inventory-system
+cd inventory-system
 
 ```
 
