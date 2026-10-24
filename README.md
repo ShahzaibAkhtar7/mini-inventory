@@ -1,4 +1,9 @@
-Markdown# Mini Product Inventory System
+Aapka README is liye kharab dikh raha hai kyunki Markdown ke andronic code blocks (`````) mein kuch jagah par code block ki formatting mix ho gayi hai aur headings ya spacing theek nahi hai.
+
+Isay theek karne ke liye, aap apne root folder wali `README.md` file ko kholen, uss ka saara purana text delete kar dein, aur neechay diya gaya yeh **sahi aur clean format wala code** copy karke wahan paste kar dein. Yeh GitHub par bilkul professional aur saaf-suthra nazar aayega:
+
+```markdown
+# Mini Product Inventory System
 
 A full-stack web application built as a technical assessment for a Full Stack Developer role. The system allows users to view available inventory, purchase products in real-time, and ensures strict concurrency safety to prevent negative stock.
 
@@ -38,19 +43,100 @@ mini-inventory-system/
     │   └── main.jsx
     ├── tailwind.config.js
     └── package.json
-⚙️ Installation & Running LocallyPrerequisitesNode.js installed on your machine.MongoDB running locally (Compass or Service) or a MongoDB Atlas URI.1. Clone the RepositoryBashgit clone <your-repository-url>
+
+```
+
+---
+
+## ⚙️ Installation & Running Locally
+
+### Prerequisites
+
+* Node.js installed on your machine.
+* MongoDB running locally (Compass or Service) or a MongoDB Atlas URI.
+
+### 1. Clone the Repository
+
+```bash
+git clone <your-repository-url>
 cd mini-inventory-system
-2. Setup BackendBashcd backend
+
+```
+
+### 2. Setup Backend
+
+```bash
+cd backend
 npm install
-Create a .env file inside the backend folder based on .env.example:Code snippetPORT=5000
+
+```
+
+* Create a `.env` file inside the `backend` folder based on `.env.example`:
+```env
+PORT=5000
 MONGO_URI=mongodb://localhost:27017/mini-inventory
 ADMIN_API_KEY=my_secure_admin_key_123
-Start the backend server:Bashnpm run dev
-3. Setup FrontendOpen a new terminal window:Bashcd frontend
+
+```
+
+
+* Start the backend server:
+```bash
+npm run dev
+
+```
+
+
+
+### 3. Setup Frontend
+
+Open a new terminal window:
+
+```bash
+cd frontend
 npm install
 npm run dev
-Open your browser and navigate to http://localhost:5173.🔌 API EndpointsMethodEndpointDescriptionProtected?GET/api/productsRetrieve all products in inventoryNoPOST/api/productsAdd a new productYes (x-admin-key)POST/api/purchase/:idPurchase one unit of a productNo🔒 Handling the Concurrency Challenge (Race Conditions)The ProblemIf only one item remains in stock and two customers attempt to purchase it simultaneously, a standard find() followed by an update() can lead to a race condition, allowing both transactions to succeed and resulting in negative inventory (stock: -1).The SolutionWe solved this by using MongoDB's atomic operation via Mongoose's findOneAndUpdate combined with conditional querying:JavaScriptconst updatedProduct = await Product.findOneAndUpdate(
-  { _id: productId, stock: { $gt: 0 } }, // Ensures stock is greater than 0 {$inc: { stock: -1 } },           // Atomically decrements stock by 1
+
+```
+
+Open your browser and navigate to `http://localhost:5173`.
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description | Protected? |
+| --- | --- | --- | --- |
+| **GET** | `/api/products` | Retrieve all products in inventory | No |
+| **POST** | `/api/products` | Add a new product | Yes (`x-admin-key`) |
+| **POST** | `/api/purchase/:id` | Purchase one unit of a product | No |
+
+---
+
+## 🔒 Handling the Concurrency Challenge (Race Conditions)
+
+### The Problem
+
+If only **one item** remains in stock and **two customers** attempt to purchase it simultaneously, a standard `find()` followed by an `update()` can lead to a race condition, allowing both transactions to succeed and resulting in negative inventory (`stock: -1`).
+
+### The Solution
+
+We solved this by using MongoDB's **atomic operation** via Mongoose's `findOneAndUpdate` combined with conditional querying:
+
+```javascript
+const updatedProduct = await Product.findOneAndUpdate(
+  { _id: productId, stock: { $gt: 0 } }, {$inc: { stock: -1 } },           
   { returnDocument: 'after' }
 );
-Why this works:MongoDB executes this query as a single, indivisible atomic step, serializing concurrent requests.The condition stock: { $gt: 0 } guarantees that the update only occurs if stock is available.If two requests hit simultaneously, the first request succeeds and decrements stock to 0. The second request fails because the condition stock > 0 is no longer met, returning null which triggers a 400 Bad Request ("Out of stock") response.
+
+```
+
+**Why this works:**
+
+1. MongoDB executes this query as a single, indivisible atomic step, serializing concurrent requests.
+2. The condition `stock: { $gt: 0 }` guarantees that the update only occurs if stock is available.
+3. If two requests hit simultaneously, the first request succeeds and decrements stock to `0`. The second request fails because the condition `stock > 0` is no longer met, returning `null` which triggers a `400 Bad Request` ("Out of stock") response.
+
+```
+
+```
