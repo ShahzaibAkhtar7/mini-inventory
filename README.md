@@ -30,7 +30,7 @@ A full-stack web application built as a technical assessment for a Full Stack De
 ## 🛠️ Project Structure
 
 ```text
-mini-inventory-system/
+inventory-system/
 ├── backend/
 │   ├── models/
 │   │   └── Product.js
@@ -105,11 +105,11 @@ Open your browser and navigate to `http://localhost:5173`.
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint | Description | Protected? |
+| Method | Endpoint | Description | 
 | --- | --- | --- | --- |
-| **GET** | `/api/products` | Retrieve all products in inventory | No |
-| **POST** | `/api/products` | Add a new product | Yes (`x-admin-key`) |
-| **POST** | `/api/purchase/:id` | Purchase one unit of a product | No |
+| **GET** | `/api/products` | Retrieve all products in inventory 
+| **POST** | `/api/products` | Add a new product 
+| **POST** | `/api/purchase/:id` | Purchase one unit of a product 
 
 ---
 
