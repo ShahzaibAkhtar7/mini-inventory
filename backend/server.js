@@ -13,12 +13,12 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-// Database Connection & Auto-Seeding Sample Products
+
 mongoose.connect(process.env.MONGO_URI)
   .then(async () => {
     console.log('MongoDB connected successfully');
     
-    // Auto-seed sample products if database is empty (ensures great UX for evaluator)
+    
     try {
       const count = await Product.countDocuments();
       if (count === 0) {
@@ -36,11 +36,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error('MongoDB connection error:', err));
 
 
-// ==========================================
-// API ROUTES
-// ==========================================
 
-// 1. GET /api/products — Retrieve all products
 app.get('/api/products', async (req, res) => {
   try {
     const products = await Product.find({});
@@ -51,10 +47,10 @@ app.get('/api/products', async (req, res) => {
 });
 
 
-// 2. POST /api/products — Add a new product (Protected with Admin API Key)
+
 app.post('/api/products', async (req, res) => {
   try {
-    // Check Admin API Key header
+   
     const apiKey = req.headers['x-admin-key'];
     if (!apiKey || apiKey !== process.env.ADMIN_API_KEY) {
       return res.status(403).json({ message: 'Access denied. Invalid or missing admin API key.' });
@@ -62,7 +58,7 @@ app.post('/api/products', async (req, res) => {
 
     const { name, price, stock } = req.body;
 
-    // Simple validation
+  
     if (!name || price === undefined || stock === undefined) {
       return res.status(400).json({ message: 'Please provide name, price, and stock.' });
     }
@@ -86,12 +82,12 @@ app.post('/api/products', async (req, res) => {
 });
 
 
-// 3. POST /api/purchase/:id — Purchase one unit (Concurrency Safe)
+
 app.post('/api/purchase/:id', async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // Atomic update: ensures stock > 0 and decrements safely preventing race conditions
+    
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: productId, stock: { $gt: 0 } },
       { $inc: { stock: -1 } },
