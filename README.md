@@ -1,8 +1,3 @@
-Aapka README is liye kharab dikh raha hai kyunki Markdown ke andronic code blocks (`````) mein kuch jagah par code block ki formatting mix ho gayi hai aur headings ya spacing theek nahi hai.
-
-Isay theek karne ke liye, aap apne root folder wali `README.md` file ko kholen, uss ka saara purana text delete kar dein, aur neechay diya gaya yeh **sahi aur clean format wala code** copy karke wahan paste kar dein. Yeh GitHub par bilkul professional aur saaf-suthra nazar aayega:
-
-```markdown
 # Mini Product Inventory System
 
 A full-stack web application built as a technical assessment for a Full Stack Developer role. The system allows users to view available inventory, purchase products in real-time, and ensures strict concurrency safety to prevent negative stock.
